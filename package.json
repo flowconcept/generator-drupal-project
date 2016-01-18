@@ -1,0 +1,23 @@
+{
+  "name": "generator-drupal-project",
+  "version": "0.1.0",
+  "description": "Creates drupal-project instance with git repository and drupal profile.",
+  "files": [
+    "generators/app",
+    "generators/router"
+  ],
+  "keywords": [
+    "yeoman-generator",
+    "drupal"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.20.2"
+  },
+  "main": "index.js",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/flowconcept/generator-drupal-project.git"
+  },
+  "homepage": "https://github.com/flowconcept/generator-drupal-project"
+}

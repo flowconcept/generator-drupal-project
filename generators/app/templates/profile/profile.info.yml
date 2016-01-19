@@ -1,0 +1,42 @@
+name: <%= profileName %>
+description: 'A drupal-project profile'
+type: profile
+core: 8.x
+dependencies:
+  - block
+  - breakpoint
+  - ckeditor
+  - config
+  - contact
+  - contextual
+  - datetime
+  - dblog
+  - dynamic_page_cache
+  - editor
+  - field_ui
+  - file
+  - help
+  - image
+  - locale
+  - menu_link_content
+  - menu_ui
+  - node
+  - options
+  - page_cache
+  - path
+  - quickedit
+  - rdf
+  - search
+  - shortcut
+  - system
+  - taxonomy
+  - toolbar
+  - user
+  - views
+  - views_ui
+themes:
+  - seven
+  - <%= theme %>
+distribution:
+  name: <%= profileName %>
+features: true

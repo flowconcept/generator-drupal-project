@@ -44,11 +44,23 @@ module.exports = generators.Base.extend({
     }, {
       name: 'repoUrl',
       message: 'Repository url:',
-      default: function(answers) { return 'git@git.flowconcept.de:d8distro/'+ answers.repoName +'.git' }
+      default: function(answers) { return 'git@git.flowconcept.de:d8distro/'+ answers.repoName +'.git'; }
     }, {
       name: 'templateUrl',
       message: 'Drupal composer template repository url:',
       default: 'git@github.com:flowconcept/drupal-project.git'
+    }, {
+      name: 'profileMachineName',
+      message: 'Profile machine name',
+      default: function(answers) { return answers.repoName +'_profile'; }
+    }, {
+      name: 'profileName',
+      message: 'Profile full name',
+      default: function(answers) { return answers.repoName +'Profile'}
+    }, {
+      name: 'theme',
+      message: 'Main theme',
+      default: function(answers) { return answers.repoName; }
     }];
 
     this.prompt(questions, function ( answers ) {
@@ -66,14 +78,64 @@ module.exports = generators.Base.extend({
    */
   setupRepository: function () {
     this.spawnCommandSync('git',['clone', this.repoUrl]);
-    this.destinationPath(this.repoName);
     this.spawnCommandSync('git',['remote', 'add', 'drupal-project', this.templateUrl], {cwd: this.repoName});
     this.spawnCommandSync('git',['fetch', 'drupal-project'], {cwd: this.repoName});
     this.spawnCommandSync('git',['pull', 'drupal-project', '8.x'], {cwd: this.repoName});
   },
 
-  install: function () {
-/*    this.spawnCommand('composer', ['install']); */
-  }
+  /**
+   * Create the file structure: copy files and folders.
+   */
+  generateProfileStructure: function () {
+    this.destinationRoot(this.repoName +'/htdocs/profiles/'+ this.profileMachineName);
 
+    // Create profile folder.
+    mkdirp(this.destinationRoot());
+
+    this.templateName = 'profile';
+    this._copyFolders(['config']);
+    this._copyFiles([
+      ['profile.info.yml', this.profileMachineName + '.info.yml'],
+      ['profile.install', this.profileMachineName + '.install']
+    ]);
+  },
+
+  /**
+   * Copy files with templating.
+   *
+   * @param fileNames
+   *  Array of array of file source paths and destination paths:
+   *  [
+   *    [oldfile.php, newfile.php]
+   *  ]
+   * @private
+   */
+  _copyFiles: function( fileNames ) {
+    try {
+      var generator = this;
+      fileNames.forEach(function (fileName) {
+        generator.template(generator.templateName +'/'+ fileName[0], generator.destinationRoot() +'/'+ fileName[1]);
+      });
+    } catch (e) {
+      this.log('Files cannot be copied.', fileNames, e);
+    }
+  },
+
+  /**
+   * Copy folders.
+   *
+   * @param folderNames
+   *  Array of folder names.
+   * @private
+   */
+  _copyFolders: function (folderNames) {
+    try {
+      var generator = this;
+      folderNames.forEach(function (folderName) {
+        generator.directory(generator.templateName +'/'+ folderName, generator.destinationRoot() +'/'+ folderName);
+      });
+    } catch (e) {
+      generator.log('Folder cannot be copied.', folderNames, e);
+    }
+  }
 });

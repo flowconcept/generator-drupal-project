@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - vrausbildungsboerse
+    - <%= theme %>
 id: system_footer_menu
-theme: vrausbildungsboerse
+theme: <%= theme %>
 region: footer
 weight: -4
 provider: null

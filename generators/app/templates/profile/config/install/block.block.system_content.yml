@@ -4,9 +4,9 @@ dependencies:
   module:
     - system
   theme:
-    - vrausbildungsboerse
+    - <%= theme %>
 id: system_content
-theme: vrausbildungsboerse
+theme: <%= theme %>
 region: content
 weight: -1
 provider: null

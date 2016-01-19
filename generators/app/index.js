@@ -84,20 +84,34 @@ module.exports = generators.Base.extend({
   },
 
   /**
-   * Create the file structure: copy files and folders.
+   * Create the profile structure: copy files and folders.
    */
-  generateProfileStructure: function () {
-    this.destinationRoot(this.repoName +'/htdocs/profiles/'+ this.profileMachineName);
-
-    // Create profile folder.
-    mkdirp(this.destinationRoot());
-
+  generateProfile: function () {
     this.templateName = 'profile';
+    this.templateDestination = this.repoName +'/htdocs/profiles/'+ this.profileMachineName;
+
+    // Create profile destination folder.
+    mkdirp(this.templateDestination);
     this._copyFolders(['config']);
     this._copyFiles([
       ['profile.info.yml', this.profileMachineName + '.info.yml'],
       ['profile.install', this.profileMachineName + '.install']
     ]);
+  },
+
+  /**
+   * Create the theme structure: copy files and folders.
+   */
+  generateTheme: function () {
+    this.templateName = 'theme';
+    this.templateDestination = this.repoName +'/htdocs/themes/'+ this.theme;
+
+    // Create theme destination folder.
+    mkdirp(this.templateDestination);
+    this._copyFiles([
+      ['theme.info.yml', this.theme + '.info.yml'],
+    ]);
+
   },
 
   /**
@@ -114,7 +128,7 @@ module.exports = generators.Base.extend({
     try {
       var generator = this;
       fileNames.forEach(function (fileName) {
-        generator.template(generator.templateName +'/'+ fileName[0], generator.destinationRoot() +'/'+ fileName[1]);
+        generator.template(generator.templateName +'/'+ fileName[0], generator.templateDestination +'/'+ fileName[1]);
       });
     } catch (e) {
       this.log('Files cannot be copied.', fileNames, e);
@@ -132,7 +146,7 @@ module.exports = generators.Base.extend({
     try {
       var generator = this;
       folderNames.forEach(function (folderName) {
-        generator.directory(generator.templateName +'/'+ folderName, generator.destinationRoot() +'/'+ folderName);
+        generator.directory(generator.templateName +'/'+ folderName, generator.templateDestination +'/'+ folderName);
       });
     } catch (e) {
       generator.log('Folder cannot be copied.', folderNames, e);

@@ -1,0 +1,4 @@
+name: <%= theme %>
+type: theme
+base theme: classy
+core: 8.x

@@ -44,7 +44,7 @@ module.exports = generators.Base.extend({
     }, {
       name: 'repoUrl',
       message: 'Repository url:',
-      default: function(answers) { return 'git@git.flowconcept.de:d8distro/'+ answers.repoName +'.git'; }
+      default: function(answers) { return 'git@git.flowconcept.de:d8distro/' + answers.repoName + '.git'; }
     }, {
       name: 'templateUrl',
       message: 'Drupal composer template repository url:',
@@ -52,11 +52,11 @@ module.exports = generators.Base.extend({
     }, {
       name: 'profileMachineName',
       message: 'Profile machine name',
-      default: function(answers) { return answers.repoName +'_profile'; }
+      default: function(answers) { return answers.repoName + '_profile'; }
     }, {
       name: 'profileName',
       message: 'Profile full name',
-      default: function(answers) { return answers.repoName +'Profile'}
+      default: function(answers) { return answers.repoName + 'Profile'}
     }, {
       name: 'theme',
       message: 'Main theme',
@@ -88,7 +88,7 @@ module.exports = generators.Base.extend({
    */
   generateProfile: function () {
     this.templateName = 'profile';
-    this.templateDestination = this.repoName +'/htdocs/profiles/'+ this.profileMachineName;
+    this.templateDestination = this.repoName + '/htdocs/profiles/' + this.profileMachineName;
 
     // Create profile destination folder.
     mkdirp(this.templateDestination);
@@ -104,7 +104,7 @@ module.exports = generators.Base.extend({
    */
   generateTheme: function () {
     this.templateName = 'theme';
-    this.templateDestination = this.repoName +'/htdocs/themes/'+ this.theme;
+    this.templateDestination = this.repoName + '/htdocs/themes/' + this.theme;
 
     // Create theme destination folder.
     mkdirp(this.templateDestination);
@@ -135,7 +135,7 @@ module.exports = generators.Base.extend({
     try {
       var generator = this;
       fileNames.forEach(function (fileName) {
-        generator.template(generator.templateName +'/'+ fileName[0], generator.templateDestination +'/'+ fileName[1]);
+        generator.template(generator.templateName + '/' + fileName[0], generator.templateDestination + '/' + fileName[1]);
       });
     } catch (e) {
       this.log('Files cannot be copied.', fileNames, e);
@@ -153,7 +153,7 @@ module.exports = generators.Base.extend({
     try {
       var generator = this;
       folderNames.forEach(function (folderName) {
-        generator.directory(generator.templateName +'/'+ folderName, generator.templateDestination +'/'+ folderName);
+        generator.directory(generator.templateName + '/' + folderName, generator.templateDestination + '/' + folderName);
       });
     } catch (e) {
       generator.log('Folder cannot be copied.', folderNames, e);

@@ -74,7 +74,7 @@ module.exports = generators.Base.extend({
   },
 
   /**
-   * Create the file structure: copy files and folders.
+   * Clone repository and add drupal-project remote.
    */
   setupRepository: function () {
     this.spawnCommandSync('git',['clone', this.repoUrl]);
@@ -111,7 +111,14 @@ module.exports = generators.Base.extend({
     this._copyFiles([
       ['theme.info.yml', this.theme + '.info.yml'],
     ]);
+  },
 
+  /**
+   * Run composer install to build codebase
+   */
+  composerInstall: function() {
+    this.spawnCommandSync('composer',['install'], {cwd: this.repoName});
+    this.spawnCommandSync('git',['add', 'composer.lock'], {cwd: this.repoName});
   },
 
   /**

@@ -50,6 +50,14 @@ module.exports = generators.Base.extend({
       message: 'Drupal composer template repository url:',
       default: 'git@github.com:flowconcept/drupal-project.git'
     }, {
+      name: 'stagingServer',
+      message: 'Staging server',
+      default: function(answers) { return 'staging8.flowdemo.de'; }
+    }, {
+      name: 'stagingDomain',
+      message: 'Staging domain',
+      default: function(answers) { return answers.repoName + '.flowdemo.de'; }
+    }, {
       name: 'profileMachineName',
       message: 'Profile machine name',
       default: function(answers) { return answers.repoName + '_profile'; }
@@ -110,6 +118,21 @@ module.exports = generators.Base.extend({
     mkdirp(this.templateDestination);
     this._copyFiles([
       ['theme.info.yml', this.theme + '.info.yml'],
+    ]);
+  },
+
+  /**
+   * Create the profile structure: copy files and folders.
+   */
+  generateConfiguration: function () {
+    this.templateName = 'config';
+    this.templateDestination = this.repoName + '/' + this.templateName;
+
+    // Create profile destination folder.
+    mkdirp(this.templateDestination);
+    this._copyFiles([
+      ['config.aliases.drushrc.php', this.profileMachineName + '.aliases.drushrc.php'],
+      ['vhost.conf', this.profileMachineName + '.conf']
     ]);
   },
 

@@ -9,7 +9,7 @@ $aliases['staging'] = array (
   'path-aliases' =>
   array (
     '%drush' => '/usr/bin/drush',
-    '%dump-dir' => '/www/<%= profileName %>/dbdumps',
+    '%dump-dir' => '/www/<%= repoName %>/dbdumps',
     '%files' => 'sites/default/files',
   ),
   'databases' =>
@@ -18,9 +18,9 @@ $aliases['staging'] = array (
     array (
       'default' =>
       array (
-        'database' => '<%= profileName %>',
-        'username' => 'azuboe',
-        'password' => '528TghRelM23XwK0LcE',
+        'database' => '<%= dbDatabase %>',
+        'username' => '<%= dbUser %>',
+        'password' => '<%= dbPassword %>',
         'host' => 'localhost',
         'port' => '',
         'driver' => 'mysql',

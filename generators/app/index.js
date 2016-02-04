@@ -73,7 +73,9 @@ module.exports = generators.Base.extend({
     }];
 
     this.prompt(questions, function ( answers ) {
-      // this.repoName = answers.repoName;
+      this.dbDatabase = answers.repoName;
+      this.dbUser = answers.repoName;
+      this.dbPassword = randomstring.generate(16);
       // Pass answers to params.
       for(var key in answers) {
         this[key] = answers[key];

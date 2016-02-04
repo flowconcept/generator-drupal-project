@@ -134,8 +134,8 @@ module.exports = generators.Base.extend({
     // Create profile destination folder.
     mkdirp(this.templateDestination);
     this._copyFiles([
-      ['config.aliases.drushrc.php', this.profileMachineName + '.aliases.drushrc.php'],
-      ['vhost.conf', this.profileMachineName + '.conf']
+      ['config.aliases.drushrc.php', this.repoName + '.aliases.drushrc.php'],
+      ['vhost.conf', this.repoName + '.conf']
     ]);
   },
 

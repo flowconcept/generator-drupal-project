@@ -15,6 +15,7 @@ var mkdirp = require('mkdirp');
  * @type {function(): Environment|exports}
  */
 var generators = require('yeoman-generator');
+var randomstring = require("randomstring");
 
 
 module.exports = generators.Base.extend({

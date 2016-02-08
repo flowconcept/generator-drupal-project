@@ -74,7 +74,8 @@ module.exports = generators.Base.extend({
 
     this.prompt(questions, function ( answers ) {
       this.dbDatabase = answers.repoName;
-      this.dbUser = answers.repoName;
+      // MySql limits username to 16 chars.
+      this.dbUser = answers.repoName.substr(0,15);
       this.dbPassword = randomstring.generate(16);
       // Pass answers to params.
       for(var key in answers) {

@@ -77,6 +77,7 @@ module.exports = generators.Base.extend({
       // MySql limits username to 16 chars.
       this.dbUser = answers.repoName.substr(0,15);
       this.dbPassword = randomstring.generate(16);
+      this.drupalHashSalt = randomstring.generate(60);
       // Pass answers to params.
       for(var key in answers) {
         this[key] = answers[key];
@@ -126,17 +127,28 @@ module.exports = generators.Base.extend({
   },
 
   /**
-   * Create the profile structure: copy files and folders.
+   * Create basic configuration: apache2 vhost, drush and drupal settings.
    */
   generateConfiguration: function () {
     this.templateName = 'config';
     this.templateDestination = this.repoName + '/' + this.templateName;
 
-    // Create profile destination folder.
+    // Create config destination folder.
     mkdirp(this.templateDestination);
     this._copyFiles([
       ['config.aliases.drushrc.php', this.repoName + '.aliases.drushrc.php'],
-      ['vhost.conf', this.repoName + '.conf']
+      ['vhost.conf', this.repoName + '.conf'],
+      ['default.settings.local.php', 'staging.settings.local.php']
+    ]);
+  },
+
+  /**
+   * Add hash_salt.
+   */
+  addSettingsPhp: function () {
+    this.templateDestination = this.repoName + '/htdocs/sites/default';
+    this._copyFiles([
+      ['default.settings.php', 'settings.php']
     ]);
   },
 

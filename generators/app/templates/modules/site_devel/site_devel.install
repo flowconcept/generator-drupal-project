@@ -1,0 +1,43 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the site_devel module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function site_devel_install() {
+  site_devel_sync_modules('sync', 'install');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function site_devel_uninstall() {
+  site_devel_sync_modules('sync', 'uninstall');
+  site_devel_sync_modules('uninstall', 'uninstall');
+}
+
+/**
+ * Performs action on module list.
+ *
+ * @param string $type Either 'sync' or 'uninstall'.
+ * @param string $action Either 'install' or 'uninstall'.
+ */
+function site_devel_sync_modules($type, $action) {
+  static $info;
+  if (!isset($info)) {
+    $info = \Drupal::service('info_parser')->parse(drupal_get_path('module', 'site_devel') . '/site_devel.info.yml');
+  }
+  if (!empty($info['modules'][$type])) {
+    switch ($action) {
+      case 'install':
+        \Drupal::service('module_installer')->install($info['modules'][$type]);
+        break;
+      case 'uninstall':
+        \Drupal::service('module_installer')->uninstall($info['modules'][$type], FALSE);
+        break;
+    }
+  }
+}

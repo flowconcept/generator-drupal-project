@@ -105,11 +105,23 @@ module.exports = generators.Base.extend({
 
     // Create profile destination folder.
     mkdirp(this.templateDestination);
-    this._copyFolders(['config']);
+    this._copyFolders(['config', 'translations']);
     this._copyFiles([
       ['profile.info.yml', this.profileMachineName + '.info.yml'],
       ['profile.install', this.profileMachineName + '.install']
     ]);
+  },
+
+  /**
+   * Create the profile structure: copy files and folders.
+   */
+  generateModules: function () {
+    this.templateName = 'modules';
+    this.templateDestination = this.repoName + '/htdocs/modules/custom';
+
+    // Create destination folder.
+    mkdirp(this.templateDestination);
+    this._copyFolders(['site_devel']);
   },
 
   /**
@@ -158,22 +170,6 @@ module.exports = generators.Base.extend({
   composerInstall: function() {
     this.spawnCommandSync('composer',['install'], {cwd: this.repoName});
     this.spawnCommandSync('git',['add', 'composer.lock'], {cwd: this.repoName});
-  },
-
-  /**
-   * Create the profile structure: copy files and folders.
-   */
-  generateModules: function () {
-    this.templateName = 'modules';
-    this.templateDestination = this.repoName +'/htdocs/modules';
-
-    // Create profile destination folder.
-    mkdirp(this.templateDestination);
-    this._copyFolders(['config']);
-    this._copyFiles([
-      ['profile.info.yml', this.profileMachineName + '.info.yml'],
-      ['profile.install', this.profileMachineName + '.install']
-    ]);
   },
 
   /**

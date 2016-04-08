@@ -14,8 +14,11 @@
 function <%= profileMachineName %>_install() {
   \Drupal::configFactory()->getEditable('system.site')
     // Set site slogan.
-    ->set('slogan', 'Slogan')
+    ->set('slogan', '')
     // Set front page.
-    //->set('page.front', '')
+    ->set('page.front', '/node')
     ->save(TRUE);
+
+  // Enable the admin theme.
+  \Drupal::configFactory()->getEditable('node.settings')->set('use_admin_theme', TRUE)->save(TRUE);
 }

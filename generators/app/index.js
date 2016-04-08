@@ -65,7 +65,7 @@ module.exports = generators.Base.extend({
     }, {
       name: 'profileName',
       message: 'Profile full name',
-      default: function(answers) { return answers.repoName + 'Profile'}
+      default: function(answers) { return answers.repoName + ' Profile'}
     }, {
       name: 'theme',
       message: 'Main theme',
@@ -122,7 +122,7 @@ module.exports = generators.Base.extend({
     // Create theme destination folder.
     mkdirp(this.templateDestination);
     this._copyFiles([
-      ['theme.info.yml', this.theme + '.info.yml'],
+      ['theme.info.yml', this.theme + '.info.yml']
     ]);
   },
 
@@ -158,6 +158,22 @@ module.exports = generators.Base.extend({
   composerInstall: function() {
     this.spawnCommandSync('composer',['install'], {cwd: this.repoName});
     this.spawnCommandSync('git',['add', 'composer.lock'], {cwd: this.repoName});
+  },
+
+  /**
+   * Create the profile structure: copy files and folders.
+   */
+  generateModules: function () {
+    this.templateName = 'modules';
+    this.templateDestination = this.repoName +'/htdocs/modules';
+
+    // Create profile destination folder.
+    mkdirp(this.templateDestination);
+    this._copyFolders(['config']);
+    this._copyFiles([
+      ['profile.info.yml', this.profileMachineName + '.info.yml'],
+      ['profile.install', this.profileMachineName + '.install']
+    ]);
   },
 
   /**

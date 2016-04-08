@@ -2,7 +2,7 @@ langcode: de
 status: true
 dependencies: {  }
 id: feedback
-label: 'Website feedback'
+label: Kontakt
 recipients:
   - admin@example.com
 reply: ''

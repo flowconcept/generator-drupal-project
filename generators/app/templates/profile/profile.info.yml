@@ -3,7 +3,9 @@ description: 'A drupal-project profile'
 type: profile
 core: 8.x
 dependencies:
+  - admin_toolbar
   - block
+  - block_content
   - breakpoint
   - ckeditor
   - config
@@ -13,8 +15,12 @@ dependencies:
   - dblog
   - dynamic_page_cache
   - editor
+  - features
+  - features_ui
+  - field
   - field_ui
   - file
+  - filter
   - help
   - image
   - locale
@@ -24,19 +30,21 @@ dependencies:
   - options
   - page_cache
   - path
+  - pathauto
   - quickedit
   - rdf
   - search
+  - site_base
   - shortcut
   - system
   - taxonomy
+  - text
   - toolbar
   - user
   - views
   - views_ui
 themes:
-  - seven
+  - adminimal_theme
   - <%= theme %>
 distribution:
   name: <%= profileName %>
-features: true

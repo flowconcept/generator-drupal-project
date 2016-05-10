@@ -53,7 +53,7 @@ module.exports = generators.Base.extend({
     }, {
       name: 'stagingServer',
       message: 'Staging server',
-      default: function(answers) { return 'staging8.flowdemo.de'; }
+      default: function(answers) { return 'staging8.flowconcept.de'; }
     }, {
       name: 'stagingDomain',
       message: 'Staging domain',

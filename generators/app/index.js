@@ -1,3 +1,4 @@
+/*eslint-env es6, node */
 /**
  * @file
  *
@@ -15,7 +16,8 @@ var mkdirp = require('mkdirp');
  * @type {function(): Environment|exports}
  */
 var generators = require('yeoman-generator');
-var randomstring = require("randomstring");
+var path = require('path');
+var randomstring = require('randomstring');
 
 
 module.exports = generators.Base.extend({
@@ -36,53 +38,77 @@ module.exports = generators.Base.extend({
    * Stage callback: prompting.
    */
   prompting: function () {
-    var asyncWait = this.async();
+    var done = this.async();
 
     var questions = [{
       name: 'repoName',
       message: 'Repository name:',
-      default: this.options.repo
+      default: this.options.repo,
+      store: true
     }, {
       name: 'repoUrl',
       message: 'Repository url:',
-      default: function(answers) { return 'git@git.flowconcept.de:d8distro/' + answers.repoName + '.git'; }
+      default: function (answers) { return 'git@git.flowconcept.de:d8distro/' + answers.repoName + '.git'; },
+      store: true
     }, {
       name: 'templateUrl',
       message: 'Drupal composer template repository url:',
-      default: 'git@github.com:flowconcept/drupal-project.git'
+      default: 'git@github.com:flowconcept/drupal-project.git',
+      store: true
+    }, {
+      type: 'list',
+      name: 'templateBranch',
+      message: 'Drupal composer template repository branch:',
+      choices: [
+        {name: 'LESS', value: '8.x-less'},
+        {name: 'Sass', value: '8.x-sass'}
+      ],
+      // Use master branch if not using flowconcept/drupa-project repository
+      default: 'master',
+      when: function (input) {
+        return new Promise(function (resolve, reject) {
+          resolve(input.templateUrl === 'git@github.com:flowconcept/drupal-project.git');
+        });
+      },
+      store: true
     }, {
       name: 'stagingServer',
       message: 'Staging server',
-      default: function(answers) { return 'staging8.flowconcept.de'; }
+      default: function (answers) { return 'staging8.flowconcept.de'; },
+      store: true
     }, {
       name: 'stagingDomain',
       message: 'Staging domain',
-      default: function(answers) { return answers.repoName + '.flowdemo.de'; }
+      default: function (answers) { return answers.repoName + '.flowdemo.de'; },
+      store: true
     }, {
       name: 'profileMachineName',
       message: 'Profile machine name',
-      default: function(answers) { return answers.repoName + '_profile'; }
+      default: function (answers) { return answers.repoName + '_profile'; },
+      store: true
     }, {
       name: 'profileName',
       message: 'Profile full name',
-      default: function(answers) { return answers.repoName + ' Profile'}
+      default: function (answers) { return answers.repoName + ' Profile'},
+      store: true
     }, {
       name: 'theme',
       message: 'Main theme',
-      default: function(answers) { return answers.repoName; }
+      default: function (answers) { return answers.repoName; },
+      store: true
     }];
 
-    this.prompt(questions, function ( answers ) {
+    this.prompt(questions, function (answers) {
       this.dbDatabase = answers.repoName;
       // MySql limits username to 16 chars.
-      this.dbUser = answers.repoName.substr(0,15);
+      this.dbUser = answers.repoName.substr(0, 15);
       this.dbPassword = randomstring.generate(16);
       this.drupalHashSalt = randomstring.generate(60);
       // Pass answers to params.
-      for(var key in answers) {
+      for (var key in answers) {
         this[key] = answers[key];
       }
-      asyncWait();
+      done();
     }.bind(this));
   },
 
@@ -167,9 +193,9 @@ module.exports = generators.Base.extend({
   /**
    * Run composer install to build codebase
    */
-  composerInstall: function() {
-    this.spawnCommandSync('composer',['install'], {cwd: this.repoName});
-    this.spawnCommandSync('git',['add', 'composer.lock'], {cwd: this.repoName});
+  composerInstall: function () {
+    this.spawnCommandSync('composer', ['install'], {cwd: this.repoName});
+    this.spawnCommandSync('git', ['add', 'composer.lock'], {cwd: this.repoName});
   },
 
   /**
@@ -182,13 +208,14 @@ module.exports = generators.Base.extend({
    *  ]
    * @private
    */
-  _copyFiles: function( fileNames ) {
+  _copyFiles: function (fileNames) {
     try {
       var generator = this;
       fileNames.forEach(function (fileName) {
         generator.template(generator.templateName + '/' + fileName[0], generator.templateDestination + '/' + fileName[1]);
       });
-    } catch (e) {
+    }
+    catch (e) {
       this.log('Files cannot be copied.', fileNames, e);
     }
   },
@@ -206,8 +233,9 @@ module.exports = generators.Base.extend({
       folderNames.forEach(function (folderName) {
         generator.directory(generator.templateName + '/' + folderName, generator.templateDestination + '/' + folderName);
       });
-    } catch (e) {
-      generator.log('Folder cannot be copied.', folderNames, e);
+    }
+    catch (e) {
+      this.log('Folder cannot be copied.', folderNames, e);
     }
   }
 });

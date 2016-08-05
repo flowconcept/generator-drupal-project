@@ -116,10 +116,11 @@ module.exports = generators.Base.extend({
    * Clone repository and add drupal-project remote.
    */
   setupRepository: function () {
-    this.spawnCommandSync('git',['clone', this.repoUrl]);
-    this.spawnCommandSync('git',['remote', 'add', 'drupal-project', this.templateUrl], {cwd: this.repoName});
-    this.spawnCommandSync('git',['fetch', 'drupal-project'], {cwd: this.repoName});
-    this.spawnCommandSync('git',['pull', 'drupal-project', '8.x'], {cwd: this.repoName});
+    this.spawnCommandSync('git', ['init'], {cwd: this.repoName});
+    this.spawnCommandSync('git', ['remote', 'add', 'origin', this.repoUrl], {cwd: this.repoName});
+    this.spawnCommandSync('git', ['remote', 'add', 'drupal-project', this.templateUrl], {cwd: this.repoName});
+    this.spawnCommandSync('git', ['fetch', 'drupal-project'], {cwd: this.repoName});
+    this.spawnCommandSync('git', ['pull', 'drupal-project', this.templateBranch], {cwd: this.repoName});
   },
 
   /**

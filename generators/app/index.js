@@ -127,6 +127,10 @@ module.exports = generators.Base.extend({
    * Create the profile structure: copy files and folders.
    */
   generateProfile: function () {
+    var dest = path.join(this.repoName, 'htdocs', 'profiles', this.profileMachineName);
+    this.directory(path.join('profile', 'config'), path.join(dest, 'config'));
+    return;
+
     this.templateName = 'profile';
     this.templateDestination = this.repoName + '/htdocs/profiles/' + this.profileMachineName;
 
@@ -163,6 +167,19 @@ module.exports = generators.Base.extend({
     this._copyFiles([
       ['theme.info.yml', this.theme + '.info.yml']
     ]);
+  },
+
+  /**
+   * Modify drupal-project's gulpfile theme path.
+   */
+  modifyGulpfile: function () {
+    this.sourceRoot(this.repoName);
+    this.destinationRoot(this.repoName);
+    this.template('gulpfile.js', 'gulpfile.js', this, {
+      // Use custom EJS open/close delimiters to differentiate between multiple templates.
+      open: '{{',
+      close: '}}'
+    });
   },
 
   /**

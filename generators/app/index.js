@@ -116,6 +116,7 @@ module.exports = generators.Base.extend({
    * Clone repository and add drupal-project remote.
    */
   setupRepository: function () {
+    this.spawnCommandSync('mkdir', [this.repoName], {});
     this.spawnCommandSync('git', ['init'], {cwd: this.repoName});
     this.spawnCommandSync('git', ['remote', 'add', 'origin', this.repoUrl], {cwd: this.repoName});
     this.spawnCommandSync('git', ['remote', 'add', 'drupal-project', this.templateUrl], {cwd: this.repoName});
@@ -138,19 +139,7 @@ module.exports = generators.Base.extend({
       ['profile.install', this.profileMachineName + '.install']
     ]);
   },
-
-  /**
-   * Create the profile structure: copy files and folders.
-   */
-  generateModules: function () {
-    this.templateName = 'modules';
-    this.templateDestination = this.repoName + '/htdocs/modules/custom';
-
-    // Create destination folder.
-    mkdirp(this.templateDestination);
-    this._copyFolders(['site_devel']);
-  },
-
+  
   /**
    * Create the theme structure: copy files and folders.
    */

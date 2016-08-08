@@ -74,12 +74,12 @@ module.exports = generators.Base.extend({
     }, {
       name: 'stagingServer',
       message: 'Staging server',
-      default: 'staging8.flowdemo.de',
+      default: function (answers) { return 'staging8.flowconcept.de'; },
       store: true
     }, {
       name: 'stagingDomain',
       message: 'Staging domain',
-      default: function (answers) { return answers.repoName + '.flowconcept.de'; },
+      default: function (answers) { return answers.repoName + '.flowdemo.de'; },
       store: true
     }, {
       name: 'profileMachineName',

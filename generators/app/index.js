@@ -128,6 +128,10 @@ module.exports = generators.Base.extend({
    * Create the profile structure: copy files and folders.
    */
   generateProfile: function () {
+    var dest = path.join(this.repoName, 'htdocs', 'profiles', this.profileMachineName);
+    this.directory(path.join('profile', 'config'), path.join(dest, 'config'));
+    return;
+
     this.templateName = 'profile';
     this.templateDestination = this.repoName + '/htdocs/profiles/' + this.profileMachineName;
 
